@@ -41,7 +41,8 @@ class CategoryCreate extends FormRequest
      */
     protected function failedValidation(Validator $validator)
     {
-        $response = ApiResponse::sendResponse(422, 'Validation Error', $validator->messages()->all());
+        $data=$validator->messages()->all();
+        $response = ApiResponse::sendResponse($data,"Validation Error",422 );
         throw new ValidationException($validator, $response);
     }
 

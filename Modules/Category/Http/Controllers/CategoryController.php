@@ -2,7 +2,6 @@
 
 namespace Modules\Category\Http\Controllers;
 
-// use Modules\Category\Helpers\ApiResponse;
 use App\Helpers\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -16,29 +15,33 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = DB::table('categories')->select('*')->get();
-        return ApiResponse::sendResponse('200', 'All Categories', CategoryResource::collection($categories));
-        
+        $categories = DB::select('select * from categories');
+        $data=CategoryResource::collection($categories);
+        return ApiResponse::sendResponse($data, 'All Categories Retrived');
     }
 
 
 
     public function store(CategoryCreate $request)
     {
-        $data=$request->validated();
+        $data = $request->validated();
         Category::create($data);
-        return ApiResponse::sendResponse('201','Created Successfuly',[]);
+        return ApiResponse::sendResponse([], 'Created Sucessfuly', 201);
     }
 
 
-    public function show($id)
+    public function show(Request $request)
     {
-
-        //
+        $searchParam = $request->input('searchparam');
+        $category = DB::table('categories')
+        ->select('id', 'name')
+        ->where('name', 'LIKE', "%$searchParam%")
+        ->get();
+        if (count($category) > 0) {
+            return ApiResponse::sendResponse($category, 'Category Found');
+        }
+        return ApiResponse::sendResponse([], 'Not Found', 404);
     }
-
-
-
 
     public function update(Request $request, $id)
     {
