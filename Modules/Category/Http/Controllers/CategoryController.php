@@ -2,7 +2,6 @@
 
 namespace Modules\Category\Http\Controllers;
 
-use App\Helpers\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +16,7 @@ class CategoryController extends Controller
     {
         $categories = DB::select('select * from categories');
         $data=CategoryResource::collection($categories);
-        return ApiResponse::sendResponse($data, 'All Categories Retrived');
+        return sendResponse($data, 'All Categories Retrived');
     }
 
 
@@ -26,7 +25,7 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
         Category::create($data);
-        return ApiResponse::sendResponse([], 'Created Sucessfuly', 201);
+        return sendResponse([], 'Created Sucessfuly', 201);
     }
 
 
@@ -38,9 +37,9 @@ class CategoryController extends Controller
         ->where('name', 'LIKE', "%$searchParam%")
         ->get();
         if (count($category) > 0) {
-            return ApiResponse::sendResponse($category, 'Category Found');
+            return sendResponse($category, 'Category Found');
         }
-        return ApiResponse::sendResponse([], 'Not Found', 404);
+        return sendResponse([], 'Not Found', 404);
     }
 
     public function update(Request $request, $id)
