@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Api\auth;
+namespace Modules\Users\Http\Requests\api\auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
-
-class RegisterRequest extends FormRequest
+class emailActivationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,19 +23,14 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=>['required','string','min:3','max:190'],
-            'email'=>['required','email'],
-            'phone'=>['required','string','max:20'],
-            'password'=>['required','string','max:20','confirmed'],
+            'code_type' => 'required|in:email,phone',
+            'code' => 'required|integer',
         ];
     }
     public function attributes(){
         return [
-            'name'=>'Name',
-            'email'=>'Email',
-            'phone'=>'Phone Number',
-            'password'=>'Password',
-            'password_confirmation' => 'Confirmation Password',
+            'code_type'=>'Code Type',
+            'code'=>'Activation Code',
         ];
     }
 
@@ -47,5 +41,4 @@ class RegisterRequest extends FormRequest
         $response =sendResponse($data,"Validation Error",422 );
         throw new ValidationException($validator, $response);
     }
-
 }

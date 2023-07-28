@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail;
+namespace Modules\Users\Http\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -38,7 +38,7 @@ class SendVerificationCode extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.email-verification',
+            view: 'users::email.email-verification',
             with:[
                     'content'=>$this->content
             ]
