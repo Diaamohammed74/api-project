@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Providers;
+namespace Modules\Users\Providers;
 
-use App\Providers\SendVerifyCode;
-use App\Mail\SendVerificationCode;
 use Illuminate\Support\Facades\Mail;
+use Modules\Users\Providers\SendVerifyCode;
+use Modules\Users\Http\Mail\SendVerificationCode;
 // use Illuminate\Queue\InteractsWithQueue;
 // use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -23,7 +23,6 @@ class SendVerifyCodeFired
      */
     public function handle(SendVerifyCode $event): void
     {
-        // dd($event->user->email);
         $user=$event->user;
         Mail::to($user->email)->send(new SendVerificationCode('Email Verfication',$user->email_code));
     }

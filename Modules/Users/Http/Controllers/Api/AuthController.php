@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Users\Http\Controllers\Api;
 
 use App\Models\User;
-use App\Events\SendVerifyCode;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\auth\RegisterRequest;
-use App\Http\Requests\api\auth\SendVerificationCode;
-use App\Http\Requests\api\auth\emailActivationRequest;
+use Modules\Users\Http\Requests\Api\auth\RegisterRequest;
+use Modules\Users\Http\Requests\api\auth\SendVerificationCode;
+use Modules\Users\Http\Requests\api\auth\emailActivationRequest;
 
 class AuthController extends Controller
 {
@@ -25,6 +24,7 @@ class AuthController extends Controller
         $data['email_code'] = rand(00000, 99999);
         $data['phone_code'] = rand(00000, 99999);
         $user = User::create($data);
+        event(new \Modules\Users\Providers\SendVerifyCode($user));
         $credentials = ['email' => $user->email, 'password' => $request->password];
         return $this->login($credentials);
     }
@@ -57,8 +57,8 @@ class AuthController extends Controller
             if ($user->email_code != null) {
                 $user->email_code = rand(00000, 99999);
                 $user->save();
-                event(new \App\Providers\SendVerifyCode($user));
-                return sendResponse([], 'Activation Code sended Successfuly');
+                event(new \Modules\Users\Providers\SendVerifyCode($user));
+                return sendResponse([], 'Activation Code sent  Successfuly');
             } else {
                 return sendResponse([], 'Account Already Activated Successfuly');
             }
