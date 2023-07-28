@@ -62,7 +62,6 @@ class AuthController extends Controller
             } else {
                 return sendResponse([], 'Account Already Activated Successfuly');
             }
-
         }
     }
 
