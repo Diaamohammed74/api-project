@@ -24,6 +24,6 @@ class SendVerifyCodeFired
     public function handle(SendVerifyCode $event): void
     {
         $user=$event->user;
-        Mail::to($user->email)->send(new SendVerificationCode('Email Verfication',$user->email_code));
+        Mail::to($user->email)->queue(new SendVerificationCode('Email Verfication',$user->email_code));
     }
 }
